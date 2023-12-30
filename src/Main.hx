@@ -1,3 +1,4 @@
+import haxe.io.Eof;
 import net.PacketHandler;
 import net.HttpServerManager;
 import database.DatabaseManager;
@@ -11,5 +12,11 @@ class Main {
 
         Sys.println("Creating listeners");
         HttpServerManager.init(PacketHandler.receiveDatabasePacket);
+        while (true) {
+            try {} catch (e:Eof) {
+                Sys.println("Stopping server");
+                HttpServerManager.close();
+            }
+        }
     }
 }

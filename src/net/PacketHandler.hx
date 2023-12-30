@@ -9,6 +9,15 @@ import haxe.Json;
 import hx_webserver.HTTPRequest;
 
 class PacketHandler {
+    public static function receivePacket(req:HTTPRequest) {
+        var packet = Json.parse(req.postData);
+        if (packet.register == null) {
+            receiveDatabasePacket(req);
+        } else {
+            // TODO
+        }
+    }
+
     public static function receiveDatabasePacket(req:HTTPRequest) {
         var packet:DatabasePacket = null;
         try {
@@ -20,6 +29,9 @@ class PacketHandler {
         }
 
         // TODO: check if the token is valid and has the correct permissions
+
+        final token = packet.token;
+        final isLoggedIn = token != null;
 
         switch (packet.instruction) {
             case ADD_USER:
@@ -37,6 +49,10 @@ class PacketHandler {
 
                 DatabaseManager.addUser(user);
             case ADD_CHANNEL:
+                if (!isLoggedIn) {
+                    req.replyData("Must be logged in to do this", "text/plain", 401);
+                    return;
+                }
                 var channel:Channel = packet.data;
 
                 final db = DatabaseManager.read();
