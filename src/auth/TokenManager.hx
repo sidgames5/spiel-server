@@ -1,5 +1,7 @@
 package auth;
 
+import sys.io.File;
+import sys.FileSystem;
 import haxe.io.Bytes;
 import haxe.crypto.Base64;
 import models.User;
@@ -21,5 +23,24 @@ class TokenManager {
         raw += random;
 
         return Base64.encode(Bytes.ofString(raw));
+    }
+
+    public static function register(user:User, token:String) {
+        if (!FileSystem.exists(".run/tokens")) {
+            File.saveContent(".run/tokens", "");
+        }
+
+        var tokens = File.getContent(".run/tokens").split("\n");
+        tokens.push(user.id + ":" + token);
+        File.saveContent(".run/tokens", tokens.join("\n"));
+    }
+
+    public static function validate(token:String):Bool {
+        for (line in File.getContent(".run/tokens").split("\n")) {
+            var t = line.split(":")[1];
+            if (token == t)
+                return true;
+        }
+        return false;
     }
 }
