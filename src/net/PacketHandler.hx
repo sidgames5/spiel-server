@@ -1,5 +1,6 @@
 package net;
 
+import auth.TokenManager;
 import util.DatabasePacketInstruction;
 import models.Channel;
 import database.DatabaseManager;
@@ -32,6 +33,10 @@ class PacketHandler {
 
         final token = packet.token;
         final isLoggedIn = token != null;
+        if (!TokenManager.validate(token)) {
+            req.replyData("Invalid token", "text/plain", 401);
+            return;
+        }
 
         switch (packet.instruction) {
             case ADD_USER:
