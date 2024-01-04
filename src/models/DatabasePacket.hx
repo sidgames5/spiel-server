@@ -7,6 +7,7 @@ import haxe.extern.EitherType;
 
 typedef DatabasePacket = {
     instruction:DatabasePacketInstruction,
-    ?data:Dynamic,
+    ?data1:Dynamic,
+    ?data2:Dynamic,
     ?token:String
 }

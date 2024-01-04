@@ -9,8 +9,4 @@ enum DatabasePacketInstruction {
     REMOVE_CHANNEL;
     GET_USER;
     GET_CHANNEL;
-    ADD_MESSAGE;
-    EDIT_MESSAGE;
-    REMOVE_MESSAGE;
-    GET_MESSAGE;
 }

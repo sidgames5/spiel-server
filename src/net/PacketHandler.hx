@@ -1,5 +1,6 @@
 package net;
 
+import models.Message;
 import auth.TokenManager;
 import util.DatabasePacketInstruction;
 import models.Channel;
@@ -40,7 +41,7 @@ class PacketHandler {
 
         switch (packet.instruction) {
             case ADD_USER:
-                var user:User = packet.data;
+                var user:User = packet.data1;
 
                 if (DatabaseManager.getUserByUsername(user.username) != null) {
                     req.replyData("Username taken", "text/plain", 409);
@@ -58,7 +59,7 @@ class PacketHandler {
                     req.replyData("Must be logged in to do this", "text/plain", 401);
                     return;
                 }
-                var channel:Channel = packet.data;
+                var channel:Channel = packet.data1;
 
                 final db = DatabaseManager.read();
                 final latestId = db.channels[db.channels.length - 1].id;
@@ -72,10 +73,6 @@ class PacketHandler {
             case REMOVE_CHANNEL:
             case GET_USER:
             case GET_CHANNEL:
-            case ADD_MESSAGE:
-            case EDIT_MESSAGE:
-            case REMOVE_MESSAGE:
-            case GET_MESSAGE:
         }
 
         req.replyData("Internal server error", "text/plain", 500);
