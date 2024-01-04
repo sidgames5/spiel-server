@@ -72,6 +72,10 @@ class PacketHandler {
             case REMOVE_CHANNEL:
             case GET_USER:
             case GET_CHANNEL:
+            case ADD_MESSAGE:
+            case EDIT_MESSAGE:
+            case REMOVE_MESSAGE:
+            case GET_MESSAGE:
         }
 
         req.replyData("Internal server error", "text/plain", 500);
