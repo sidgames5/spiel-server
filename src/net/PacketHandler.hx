@@ -54,6 +54,8 @@ class PacketHandler {
                 user.id = latestId + 1;
 
                 DatabaseManager.addUser(user);
+
+                req.replyData("Success", "text/plain", 200);
             case ADD_CHANNEL:
                 if (!isLoggedIn) {
                     req.replyData("Must be logged in to do this", "text/plain", 401);
@@ -67,12 +69,38 @@ class PacketHandler {
                 channel.id = latestId + 1;
 
                 DatabaseManager.addChannel(channel);
+
+                req.replyData("Success", "text/plain", 200);
             case EDIT_USER:
             case EDIT_CHANNEL:
             case REMOVE_USER:
             case REMOVE_CHANNEL:
             case GET_USER:
+                var user:User;
+                if (Std.isOfType(packet.data1, String)) {
+                    user = DatabaseManager.getUserByUsername(packet.data1);
+                } else {
+                    user = DatabaseManager.getUserById(packet.data1);
+                }
+
+                if (user == null) {
+                    req.replyData("User not found", "text/plain", 404);
+                }
+
+                user.passwordHash = null;
+
+                req.replyData(Json.stringify(user), "text/plain", 200);
             case GET_CHANNEL:
+                var channel:Channel;
+                channel = DatabaseManager.getChannel(packet.data1);
+
+                // TODO: make sure the user has the correct permissions to access the channel
+
+                if (channel == null) {
+                    req.replyData("Channel not found", "text/plain", 404);
+                }
+
+                req.replyData(Json.stringify(channel), "text/plain", 200);
         }
 
         req.replyData("Internal server error", "text/plain", 500);
