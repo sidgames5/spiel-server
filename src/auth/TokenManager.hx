@@ -1,5 +1,6 @@
 package auth;
 
+import database.DatabaseManager;
 import sys.io.File;
 import sys.FileSystem;
 import haxe.io.Bytes;
@@ -42,5 +43,14 @@ class TokenManager {
                 return true;
         }
         return false;
+    }
+
+    public static function getUser(token:String):User {
+        for (line in File.getContent(".run/tokens").split("\n")) {
+            var t = line.split(":")[1];
+            if (token == t)
+                return DatabaseManager.getUserById(Std.parseInt(line.split(":")[0]));
+        }
+        return null;
     }
 }
