@@ -83,6 +83,23 @@ class PacketHandler {
 
                 req.replyData("Success", "text/plain", 200);
             case EDIT_CHANNEL:
+                var channel:Channel = packet.data1;
+
+                var token = packet.token;
+                var user = TokenManager.getUser(token);
+                var tchannel = DatabaseManager.getChannel(channel.id);
+
+                if (tchannel == null) {
+                    req.replyData("Channel not found", "text/plain", 404);
+                }
+
+                if (!tchannel.members.contains(cast user)) {
+                    req.replyData("You are not allowed to access this channel", "text/plain", 401);
+                }
+
+                DatabaseManager.updateChannel(channel);
+
+                req.replyData("Success", "text/plain", 200);
             case REMOVE_USER:
             case REMOVE_CHANNEL:
             case GET_USER:
