@@ -77,6 +77,7 @@ class PacketHandler {
 
                 if (user.id != tuser.id) {
                     req.replyData("User not found or unauthorized", "text/plain", 401);
+                    return;
                 }
 
                 DatabaseManager.updateUser(user);
@@ -91,10 +92,12 @@ class PacketHandler {
 
                 if (tchannel == null) {
                     req.replyData("Channel not found", "text/plain", 404);
+                    return;
                 }
 
                 if (!tchannel.members.contains(cast user)) {
                     req.replyData("You are not allowed to access this channel", "text/plain", 401);
+                    return;
                 }
 
                 DatabaseManager.updateChannel(channel);
@@ -112,6 +115,7 @@ class PacketHandler {
 
                 if (user == null) {
                     req.replyData("User not found", "text/plain", 404);
+                    return;
                 }
 
                 user.passwordHash = null;
@@ -126,10 +130,12 @@ class PacketHandler {
 
                 if (channel == null) {
                     req.replyData("Channel not found", "text/plain", 404);
+                    return;
                 }
 
                 if (!channel.members.contains(cast user)) {
                     req.replyData("You do not have permission to access this channel", "text/plain", 401);
+                    return;
                 }
 
                 req.replyData(Json.stringify(channel), "text/plain", 200);
