@@ -30,8 +30,6 @@ class PacketHandler {
             return;
         }
 
-        // TODO: check if the token is valid and has the correct permissions
-
         final token = packet.token;
         final isLoggedIn = token != null;
         if (!TokenManager.validate(token)) {
@@ -72,6 +70,18 @@ class PacketHandler {
 
                 req.replyData("Success", "text/plain", 200);
             case EDIT_USER:
+                var user:User = packet.data1;
+
+                var token = packet.token;
+                var tuser = TokenManager.getUser(token);
+
+                if (user.id != tuser.id) {
+                    req.replyData("User not found or unauthorized", "text/plain", 401);
+                }
+
+                DatabaseManager.updateUser(user);
+
+                req.replyData("Success", "text/plain", 200);
             case EDIT_CHANNEL:
             case REMOVE_USER:
             case REMOVE_CHANNEL:
