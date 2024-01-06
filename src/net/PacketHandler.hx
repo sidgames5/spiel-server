@@ -94,10 +94,15 @@ class PacketHandler {
                 var channel:Channel;
                 channel = DatabaseManager.getChannel(packet.data1);
 
-                // TODO: make sure the user has the correct permissions to access the channel
+                var token = packet.token;
+                var user = TokenManager.getUser(token);
 
                 if (channel == null) {
                     req.replyData("Channel not found", "text/plain", 404);
+                }
+
+                if (!channel.members.contains(cast user)) {
+                    req.replyData("You do not have permission to access this channel", "text/plain", 401);
                 }
 
                 req.replyData(Json.stringify(channel), "text/plain", 200);
