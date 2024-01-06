@@ -39,7 +39,7 @@ class PacketHandler {
 
         switch (packet.instruction) {
             case ADD_USER:
-                var user:User = packet.data1;
+                var user:User = Json.parse(packet.data1);
 
                 if (DatabaseManager.getUserByUsername(user.username) != null) {
                     req.replyData("Username taken", "text/plain", 409);
@@ -59,7 +59,7 @@ class PacketHandler {
                     req.replyData("Must be logged in to do this", "text/plain", 401);
                     return;
                 }
-                var channel:Channel = packet.data1;
+                var channel:Channel = Json.parse(packet.data1);
 
                 final db = DatabaseManager.read();
                 final latestId = db.channels[db.channels.length - 1].id;
@@ -70,7 +70,7 @@ class PacketHandler {
 
                 req.replyData("Success", "text/plain", 200);
             case EDIT_USER:
-                var user:User = packet.data1;
+                var user:User = Json.parse(packet.data1);
 
                 var token = packet.token;
                 var tuser = TokenManager.getUser(token);
