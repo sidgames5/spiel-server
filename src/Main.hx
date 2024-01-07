@@ -12,8 +12,5 @@ class Main {
 
         Sys.println("Creating listeners");
         HttpServerManager.init(PacketHandler.receiveDatabasePacket);
-
-        var i = Sys.stdin().readLine();
-        HttpServerManager.close();
     }
 }

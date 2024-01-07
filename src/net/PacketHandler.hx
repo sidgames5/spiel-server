@@ -2,7 +2,6 @@ package net;
 
 import models.Message;
 import auth.TokenManager;
-import util.DatabasePacketInstruction;
 import models.Channel;
 import database.DatabaseManager;
 import models.User;
@@ -46,7 +45,7 @@ class PacketHandler {
         }
 
         switch (packet.instruction) {
-            case ADD_USER:
+            case "ADD_USER":
                 var user:User = packet.data1;
 
                 if (DatabaseManager.getUserByUsername(user.username) != null) {
@@ -62,7 +61,8 @@ class PacketHandler {
                 DatabaseManager.addUser(user);
 
                 req.replyData("Success", "text/plain", 200);
-            case ADD_CHANNEL:
+                return;
+            case "ADD_CHANNEL":
                 if (!isLoggedIn) {
                     req.replyData("Must be logged in to do this", "text/plain", 401);
                     return;
@@ -77,7 +77,8 @@ class PacketHandler {
                 DatabaseManager.addChannel(channel);
 
                 req.replyData("Success", "text/plain", 200);
-            case EDIT_USER:
+                return;
+            case "EDIT_USER":
                 var user:User = packet.data1;
 
                 var token = packet.token;
@@ -91,7 +92,8 @@ class PacketHandler {
                 DatabaseManager.updateUser(user);
 
                 req.replyData("Success", "text/plain", 200);
-            case EDIT_CHANNEL:
+                return;
+            case "EDIT_CHANNEL":
                 var channel:Channel = packet.data1;
 
                 var token = packet.token;
@@ -111,7 +113,8 @@ class PacketHandler {
                 DatabaseManager.updateChannel(channel);
 
                 req.replyData("Success", "text/plain", 200);
-            case REMOVE_USER:
+                return;
+            case "REMOVE_USER":
                 var user:User;
                 if (Std.isOfType(packet.data1, Int)) {
                     user = DatabaseManager.getUserById(packet.data1);
@@ -134,7 +137,8 @@ class PacketHandler {
 
                 DatabaseManager.removeUser(user);
                 req.replyData("Success", "text/plain", 200);
-            case REMOVE_CHANNEL:
+                return;
+            case "REMOVE_CHANNEL":
                 var channel:Channel = null;
 
                 var token = packet.token;
@@ -152,7 +156,8 @@ class PacketHandler {
 
                 DatabaseManager.removeChannel(channel);
                 req.replyData("Success", "text/plain", 200);
-            case GET_USER:
+                return;
+            case "GET_USER":
                 var user:User;
                 if (Std.isOfType(packet.data1, String)) {
                     user = DatabaseManager.getUserByUsername(packet.data1);
@@ -168,7 +173,8 @@ class PacketHandler {
                 user.passwordHash = null;
 
                 req.replyData(Json.stringify(user), "text/plain", 200);
-            case GET_CHANNEL:
+                return;
+            case "GET_CHANNEL":
                 var channel:Channel;
                 channel = DatabaseManager.getChannel(packet.data1);
 
@@ -186,6 +192,7 @@ class PacketHandler {
                 }
 
                 req.replyData(Json.stringify(channel), "text/plain", 200);
+                return;
         }
 
         req.replyData("Internal server error", "text/plain", 500);
