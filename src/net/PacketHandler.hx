@@ -32,6 +32,10 @@ class PacketHandler {
 
         final token = packet.token;
         final isLoggedIn = token != null;
+        if (TokenManager.isExpired(token)) {
+            req.replyData("Token expired", "text/plain", 401);
+            return;
+        }
         if (!TokenManager.validate(token)) {
             req.replyData("Invalid token", "text/plain", 401);
             return;
