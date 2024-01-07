@@ -108,7 +108,46 @@ class PacketHandler {
 
                 req.replyData("Success", "text/plain", 200);
             case REMOVE_USER:
+                var user:User;
+                if (Std.isOfType(packet.data1, Int)) {
+                    user = DatabaseManager.getUserById(packet.data1);
+                } else {
+                    user = DatabaseManager.getUserByUsername(packet.data1);
+                }
+
+                var token = packet.token;
+                var tuser = TokenManager.getUser(token);
+
+                if (user == null) {
+                    req.replyData("User not found", "text/plain", 404);
+                    return;
+                }
+
+                if (user.id != tuser.id) {
+                    req.replyData("You are not allowed to do this", "text/plain", 401);
+                    return;
+                }
+
+                DatabaseManager.removeUser(user);
+                req.replyData("Success", "text/plain", 200);
             case REMOVE_CHANNEL:
+                var channel:Channel;
+
+                var token = packet.token;
+                var user = TokenManager.getUser(token);
+
+                if (channel == null) {
+                    req.replyData("Channel not found", "text/plain", 404);
+                    return;
+                }
+
+                if (channel.owner.id != user.id) {
+                    req.replyData("You are not allowed to do this", "text/plain", 401);
+                    return;
+                }
+
+                DatabaseManager.removeChannel(channel);
+                req.replyData("Success", "text/plain", 200);
             case GET_USER:
                 var user:User;
                 if (Std.isOfType(packet.data1, String)) {

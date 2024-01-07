@@ -53,6 +53,7 @@ class TokenManager {
     }
 
     public static function getUser(token:String):User {
+        // TODO: make this more efficient
         for (line in File.getContent(".run/tokens").split("\n")) {
             var t = line.split(":")[1];
             if (token == t)
