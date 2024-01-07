@@ -1,0 +1,6 @@
+-cp src
+-D analyzer-optimize
+-main Main
+--library hx_webserver
+--python bin/main.py
+--cmd python bin/main.py

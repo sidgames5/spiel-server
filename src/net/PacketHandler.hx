@@ -13,11 +13,13 @@ import hx_webserver.HTTPRequest;
 class PacketHandler {
     public static function receivePacket(req:HTTPRequest) {
         var packet = Json.parse(req.postData);
-        if (packet.register == null) {
-            receiveDatabasePacket(req);
-        } else {
-            // TODO
-        }
+        receiveDatabasePacket(req);
+        // FIXME: im pretty sure the following code is causing issues
+        // if (packet.register == null) {
+        //     receiveDatabasePacket(req);
+        // } else {
+        //     // TODO
+        // }
     }
 
     public static function receiveDatabasePacket(req:HTTPRequest) {
@@ -32,13 +34,15 @@ class PacketHandler {
 
         final token = packet.token;
         final isLoggedIn = token != null;
-        if (TokenManager.isExpired(token)) {
-            req.replyData("Token expired", "text/plain", 401);
-            return;
-        }
-        if (!TokenManager.validate(token)) {
-            req.replyData("Invalid token", "text/plain", 401);
-            return;
+        if (token != null) {
+            if (TokenManager.isExpired(token)) {
+                req.replyData("Token expired", "text/plain", 401);
+                return;
+            }
+            if (!TokenManager.validate(token)) {
+                req.replyData("Invalid token", "text/plain", 401);
+                return;
+            }
         }
 
         switch (packet.instruction) {
