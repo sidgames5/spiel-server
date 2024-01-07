@@ -36,12 +36,17 @@ class TokenManager {
         File.saveContent(".run/tokens", tokens.join("\n"));
     }
 
+    public static function isExpired(token:String):Bool {
+        var t = token.split(":")[1];
+        var expiry = Date.fromTime(Std.parseFloat(t.split(".")[1]));
+        return expiry.getTime() > Date.now().getTime();
+    }
+
     public static function validate(token:String):Bool {
         for (line in File.getContent(".run/tokens").split("\n")) {
             var t = line.split(":")[1];
             if (token == t) {
-                var expiry = Date.fromTime(Std.parseFloat(t.split(".")[1]));
-                return expiry.getTime() > Date.now().getTime();
+                return !isExpired(token);
             }
         }
         return false;
