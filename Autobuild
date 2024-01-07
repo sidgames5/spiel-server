@@ -1,2 +1,2 @@
 #test_command bin/Main
-haxe build.hxml
+haxe release.hxml

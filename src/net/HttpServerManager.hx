@@ -7,7 +7,7 @@ class HttpServerManager {
     private static var httpServer:HTTPServer;
 
     public static function init(handler:(req:HTTPRequest) -> Void) {
-        httpServer = new HTTPServer("0.0.0.0", 8188, true);
+        httpServer = new HTTPServer("0.0.0.0", 8192, true);
         httpServer.onClientConnect = handler;
     }
 

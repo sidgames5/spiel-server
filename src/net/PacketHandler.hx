@@ -54,7 +54,11 @@ class PacketHandler {
                 }
 
                 final db = DatabaseManager.read();
-                final latestId = db.users[db.users.length - 1].id;
+                var latestId;
+                if (db.users.length > 0)
+                    latestId = db.users[db.users.length - 1].id;
+                else
+                    latestId = 0;
 
                 user.id = latestId + 1;
 
