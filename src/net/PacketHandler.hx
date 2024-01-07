@@ -55,7 +55,7 @@ class PacketHandler {
                 }
 
                 if (!ValidationUtils.validateUsername(user.username)) {
-                    req.replyData("Invalid username", "text/plain", 409);
+                    req.replyData("Invalid username", "text/plain", 417);
                     return;
                 }
 
