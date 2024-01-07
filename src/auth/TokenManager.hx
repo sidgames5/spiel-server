@@ -39,8 +39,10 @@ class TokenManager {
     public static function validate(token:String):Bool {
         for (line in File.getContent(".run/tokens").split("\n")) {
             var t = line.split(":")[1];
-            if (token == t)
-                return true;
+            if (token == t) {
+                var expiry = Date.fromTime(Std.parseFloat(t.split(".")[1]));
+                return expiry.getTime() > Date.now().getTime();
+            }
         }
         return false;
     }
