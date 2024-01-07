@@ -131,7 +131,7 @@ class PacketHandler {
                 DatabaseManager.removeUser(user);
                 req.replyData("Success", "text/plain", 200);
             case REMOVE_CHANNEL:
-                var channel:Channel;
+                var channel:Channel = null;
 
                 var token = packet.token;
                 var user = TokenManager.getUser(token);
