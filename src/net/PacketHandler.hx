@@ -1,5 +1,6 @@
 package net;
 
+import util.ValidationUtils;
 import models.Message;
 import auth.TokenManager;
 import models.Channel;
@@ -50,6 +51,11 @@ class PacketHandler {
 
                 if (DatabaseManager.getUserByUsername(user.username) != null) {
                     req.replyData("Username taken", "text/plain", 409);
+                    return;
+                }
+
+                if (!ValidationUtils.validateUsername(user.username)) {
+                    req.replyData("Invalid username", "text/plain", 409);
                     return;
                 }
 
