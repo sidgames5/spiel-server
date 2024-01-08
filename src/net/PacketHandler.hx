@@ -32,6 +32,7 @@ class PacketHandler {
             return;
         }
 
+        // FIXME: add error handling for invalid tokens
         final token = packet.token;
         final isLoggedIn = token != null;
         if (token != null) {
@@ -80,7 +81,11 @@ class PacketHandler {
                 var channel:Channel = packet.data1;
 
                 final db = DatabaseManager.read();
-                final latestId = db.channels[db.channels.length - 1].id;
+                var latestId;
+                if (db.users.length > 0)
+                    latestId = db.channels[db.channels.length - 1].id;
+                else
+                    latestId = 0;
 
                 channel.id = latestId + 1;
 
