@@ -1,3 +1,4 @@
+import auth.TokenManager;
 import haxe.io.Eof;
 import net.PacketHandler;
 import net.HttpServerManager;
@@ -8,6 +9,10 @@ class Main {
         if (!DatabaseManager.check()) {
             Sys.println("Initializing database");
             DatabaseManager.init();
+        }
+        if (!TokenManager.check()) {
+            Sys.println("Initializing token storage");
+            TokenManager.init();
         }
 
         Sys.println("Creating listeners");

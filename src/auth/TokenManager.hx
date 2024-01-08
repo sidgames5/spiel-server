@@ -1,5 +1,6 @@
 package auth;
 
+import haxe.Json;
 import database.DatabaseManager;
 import sys.io.File;
 import sys.FileSystem;
@@ -8,6 +9,15 @@ import haxe.crypto.Base64;
 import models.User;
 
 class TokenManager {
+    public static function init() {
+        FileSystem.createDirectory(".run/");
+        File.saveContent(".run/tokens", "");
+    }
+
+    public static function check():Bool {
+        return FileSystem.exists(".run/tokens");
+    }
+
     public static function generate(user:User):String {
         var raw = "";
 
