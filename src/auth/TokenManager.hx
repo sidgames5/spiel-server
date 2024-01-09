@@ -63,7 +63,7 @@ class TokenManager {
     }
 
     public static function getUser(token:String):User {
-        var id = Std.parseInt(token.split(".")[1]);
+        var id = Std.parseInt(Base64.decode(token).toString().split(".")[0]);
         return DatabaseManager.getUserById(id);
     }
 }

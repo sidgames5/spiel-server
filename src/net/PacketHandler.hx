@@ -115,6 +115,7 @@ class PacketHandler {
                 req.replyData("Success", "text/plain", 200);
                 return;
             case "ADD_CHANNEL":
+                // TODO: CRITICAL: change the channel members list from authors/users to userids
                 if (!isLoggedIn) {
                     req.replyData("Must be logged in to do this", "text/plain", 401);
                     return;
@@ -141,16 +142,25 @@ class PacketHandler {
                 var user:User = packet.data1;
 
                 var token = packet.token;
+
                 var tuser = TokenManager.getUser(token);
+
+                if (user == null || tuser == null) {
+                    req.replyData("User not found or unauthorized", "text/plain", 401);
+
+                    return;
+                }
 
                 if (user.id != tuser.id) {
                     req.replyData("User not found or unauthorized", "text/plain", 401);
+
                     return;
                 }
 
                 DatabaseManager.updateUser(user);
 
                 req.replyData("Success", "text/plain", 200);
+
                 return;
             case "EDIT_CHANNEL":
                 var channel:Channel = packet.data1;
