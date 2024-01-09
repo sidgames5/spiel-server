@@ -1,5 +1,6 @@
 package net;
 
+import models.AuthPacket;
 import util.ValidationUtils;
 import models.Message;
 import auth.TokenManager;
@@ -13,13 +14,49 @@ import hx_webserver.HTTPRequest;
 class PacketHandler {
     public static function receivePacket(req:HTTPRequest) {
         var packet = Json.parse(req.postData);
-        receiveDatabasePacket(req);
-        // FIXME: im pretty sure the following code is causing issues
-        // if (packet.register == null) {
-        //     receiveDatabasePacket(req);
-        // } else {
-        //     // TODO
-        // }
+        if (packet.register == null) {
+            receiveDatabasePacket(req);
+        } else {
+            receiveAuthPacket(req);
+        }
+    }
+
+    public static function receiveAuthPacket(req:HTTPRequest) {
+        var packet:AuthPacket = null;
+        try {
+            packet = Json.parse(req.postData);
+        } catch (e) {
+            Sys.println("WARN: Invalid request data: " + req.postData);
+            req.replyData("Invalid request data", "text/plain", 400);
+            return;
+        }
+
+        if (packet.register) {
+            // TODO: add handling for registering a user with an auth packet
+            req.replyData("Not implemented", "text/plain", 501);
+            return;
+        } else {
+            // ensure the password is correct
+            var pass = packet.passwordHash;
+            var user = DatabaseManager.getUserByUsername(packet.username);
+            if (user == null) {
+                req.replyData("User not found", "text/plain", 404);
+                return;
+            }
+            if (pass != user.passwordHash) {
+                req.replyData("Password incorrect", "text/plain", 401);
+                return;
+            }
+
+            // create a new session token
+            var token = TokenManager.generate(user);
+            TokenManager.register(user, token);
+
+            req.replyData(token, "text/plain", 200);
+            return;
+        }
+
+        req.replyData("Internal server error", "text/plain", 500);
     }
 
     public static function receiveDatabasePacket(req:HTTPRequest) {

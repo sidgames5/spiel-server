@@ -16,6 +16,6 @@ class Main {
         }
 
         Sys.println("Creating listeners");
-        HttpServerManager.init(PacketHandler.receiveDatabasePacket);
+        HttpServerManager.init(PacketHandler.receivePacket);
     }
 }
