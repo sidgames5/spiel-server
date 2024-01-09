@@ -24,9 +24,9 @@ class TokenManager {
         raw += user.id;
         raw += ".";
 
-        var expiry = Date.fromTime(Date.now().getTime() + (30 * 24 * 60 * 60 * 1000));
+        var expiry = Date.fromTime(Date.now().getTime() + (30.0 * 24 * 60 * 60 * 1000));
 
-        raw += Math.round(expiry.getTime());
+        raw += Math.ceil(Std.int(expiry.getTime() / 1000));
         raw += ".";
 
         var random = Math.floor(Math.random() * 2147483647);
@@ -49,7 +49,7 @@ class TokenManager {
     public static function isExpired(token:String):Bool {
         var t = token.split(":")[1];
         var expiry = Date.fromTime(Std.parseFloat(t.split(".")[1]));
-        return expiry.getTime() > Date.now().getTime();
+        return expiry.getTime() > (Date.now().getTime() / 1000);
     }
 
     public static function validate(token:String):Bool {
