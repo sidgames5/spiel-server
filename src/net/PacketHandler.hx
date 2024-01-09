@@ -122,17 +122,20 @@ class PacketHandler {
                 var channel:Channel = packet.data1;
 
                 final db = DatabaseManager.read();
+
                 var latestId;
-                if (db.users.length > 0)
+                if (db.channels.length > 0) {
                     latestId = db.channels[db.channels.length - 1].id;
-                else
+                } else {
                     latestId = 0;
+                }
 
                 channel.id = latestId + 1;
 
                 DatabaseManager.addChannel(channel);
 
                 req.replyData("Success", "text/plain", 200);
+
                 return;
             case "EDIT_USER":
                 var user:User = packet.data1;
