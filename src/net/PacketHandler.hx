@@ -184,6 +184,7 @@ class PacketHandler {
                 req.replyData("Success", "text/plain", 200);
                 return;
             case "REMOVE_USER":
+                // FIXME: not working
                 var user:User;
                 if (Std.isOfType(packet.data1, Int)) {
                     user = DatabaseManager.getUserById(packet.data1);
@@ -208,7 +209,13 @@ class PacketHandler {
                 req.replyData("Success", "text/plain", 200);
                 return;
             case "REMOVE_CHANNEL":
+                // FIXME: not working
                 var channel:Channel = null;
+                if (Std.isOfType(packet.data1, Int)) {
+                    channel = DatabaseManager.getChannel(packet.data1);
+                } else {
+                    channel = packet.data1;
+                }
 
                 var token = packet.token;
                 var user = TokenManager.getUser(token);

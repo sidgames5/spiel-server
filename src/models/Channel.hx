@@ -1,5 +1,6 @@
 package models;
 
+import models.Message;
 import models.Author;
 
 typedef Channel = {
@@ -7,5 +8,6 @@ typedef Channel = {
     name:String,
     members:Array<Int>,
     owner:Int,
-    pictureBytes:String
+    pictureBytes:String,
+    messages:Array<Message>
 }
