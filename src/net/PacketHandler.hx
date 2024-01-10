@@ -262,7 +262,7 @@ class PacketHandler {
                     return;
                 }
 
-                if (!channel.members.contains(cast user)) {
+                if (!channel.members.contains(user.id)) {
                     req.replyData("You do not have permission to access this channel", "text/plain", 401);
                     return;
                 }
