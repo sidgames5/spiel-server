@@ -1,1 +1,1 @@
-{"instruction": "EDIT_CHANNEL","data1": {"name": "Test1","members": [1],"owner": 1,"pictureBytes": ""},"token": "MS4xNzA3Mzk2NDk0LjcxODgwMzQxNg=="}
+{"instruction": "EDIT_CHANNEL","data1": {"id":1,"name": "Test1","members": [1],"owner": 1,"pictureBytes": ""},"token": "MS4xNzA3NDgxMDM0LjEwMDUwMjE2OTA="}
