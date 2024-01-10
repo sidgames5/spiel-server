@@ -174,7 +174,7 @@ class PacketHandler {
                     return;
                 }
 
-                if (!tchannel.members.contains(cast user)) {
+                if (!tchannel.members.contains(user.id)) {
                     req.replyData("You are not allowed to access this channel", "text/plain", 401);
                     return;
                 }
