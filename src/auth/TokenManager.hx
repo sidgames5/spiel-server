@@ -47,7 +47,7 @@ class TokenManager {
     }
 
     public static function isExpired(token:String):Bool {
-        var t = token.split(":")[1];
+        var t = Base64.decode(token).toString().split(":")[1];
         var expiry = Date.fromTime(Std.parseFloat(t.split(".")[1]));
         return expiry.getTime() > (Date.now().getTime() / 1000);
     }

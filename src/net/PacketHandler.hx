@@ -218,7 +218,7 @@ class PacketHandler {
                     return;
                 }
 
-                if (channel.owner.id != user.id) {
+                if (channel.owner != user.id) {
                     req.replyData("You are not allowed to do this", "text/plain", 401);
                     return;
                 }
