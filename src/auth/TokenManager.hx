@@ -62,6 +62,19 @@ class TokenManager {
         return false;
     }
 
+    public static function revoke(token:String) {
+        var newarr = [];
+
+        for (line in File.getContent(".run/tokens").split("\n")) {
+            var t = line.split(":")[1];
+            if (token != t) {
+                newarr.push(line);
+            }
+        }
+
+        File.saveContent(".run/tokens", newarr.join("\n"));
+    }
+
     public static function getUser(token:String):User {
         var id = Std.parseInt(Base64.decode(token).toString().split(".")[0]);
         return DatabaseManager.getUserById(id);
