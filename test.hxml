@@ -2,5 +2,6 @@
 -D analyzer-optimize
 -main Main
 --library hx_webserver
+--library haxe-ws
 --python bin/main.py
 --cmd python bin/main.py

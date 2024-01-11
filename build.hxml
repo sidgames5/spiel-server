@@ -2,4 +2,5 @@
 -D analyzer-optimize
 -main Main
 --library hx_webserver
+--library haxe-ws
 --interp
