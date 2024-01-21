@@ -32,8 +32,34 @@ class PacketHandler {
         }
 
         if (packet.register) {
-            // TODO: add handling for registering a user with an auth packet
-            req.replyData("Not implemented", "text/plain", 501);
+            var user:User = packet.user;
+
+            if (DatabaseManager.getUserByUsername(user.username) != null) {
+                req.replyData("Username taken", "text/plain", 409);
+                return;
+            }
+
+            if (!ValidationUtils.validateUsername(user.username)) {
+                req.replyData("Invalid username", "text/plain", 417);
+                return;
+            }
+
+            final db = DatabaseManager.read();
+            var latestId;
+            if (db.users.length > 0)
+                latestId = db.users[db.users.length - 1].id;
+            else
+                latestId = 0;
+
+            user.id = latestId + 1;
+
+            DatabaseManager.addUser(user);
+
+            // create a new session token
+            var token = TokenManager.generate(user);
+            TokenManager.register(user, token);
+
+            req.replyData(token, "text/plain", 200);
             return;
         } else {
             // ensure the password is correct
