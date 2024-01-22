@@ -309,6 +309,24 @@ class PacketHandler {
 
                 req.replyData(Json.stringify(user.requests), "text/plain", 200);
                 return;
+            case "SEND_REQUEST":
+                var user:User = null;
+                if (Std.isOfType(packet.data1, Int)) {
+                    user = DatabaseManager.getUserById(packet.data1);
+                } else {
+                    user = DatabaseManager.getUserByUsername(packet.data1);
+                }
+
+                if (user == null) {
+                    req.replyData("User not found", "text/plain", 404);
+                    return;
+                }
+
+                var id:Int = packet.data1;
+
+                user.requests.push(id);
+
+                DatabaseManager.updateUser(user);
         }
 
         req.replyData("Internal server error", "text/plain", 500);
