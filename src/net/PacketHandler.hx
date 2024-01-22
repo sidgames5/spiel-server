@@ -295,6 +295,20 @@ class PacketHandler {
 
                 req.replyData(Json.stringify(channel), "text/plain", 200);
                 return;
+            case "GET_REQUESTS":
+                // a request will be sent to the user when they are added to a channel by another user
+                // this is necessary for the user to know what channels they are in
+
+                var token = packet.token;
+                var user = TokenManager.getUser(token);
+
+                if (user == null) {
+                    req.replyData("User not found", "text/plain", 404);
+                    return;
+                }
+
+                req.replyData(Json.stringify(user.requests), "text/plain", 200);
+                return;
         }
 
         req.replyData("Internal server error", "text/plain", 500);

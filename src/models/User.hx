@@ -4,5 +4,7 @@ import models.Author;
 
 typedef User = {
     > Author,
-    passwordHash:String
+    passwordHash:String,
+    channels:Array<Int>,
+    requests:Array<Int>
 }
