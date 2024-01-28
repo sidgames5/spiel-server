@@ -53,6 +53,21 @@ class PacketHandler {
 
             user.id = latestId + 1;
 
+            if (user.channels == null)
+                user.channels = new Array<Int>();
+            if (user.displayName == null)
+                user.displayName = user.username;
+            if (user.passwordHash == null) {
+                req.replyData("No password provided", "text/plain", 417);
+                return;
+            }
+            if (user.requests == null)
+                user.requests = new Array<Int>();
+            if (user.username == null) {
+                req.replyData("No username provided", "text/plain", 417);
+                return;
+            }
+
             DatabaseManager.addUser(user);
 
             // create a new session token
