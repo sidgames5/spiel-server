@@ -156,7 +156,6 @@ class PacketHandler {
                 req.replyData("Success", "text/plain", 200);
                 return;
             case "ADD_CHANNEL":
-                // TODO: CRITICAL: change the channel members list from authors/users to userids
                 if (!isLoggedIn) {
                     req.replyData("Must be logged in to do this", "text/plain", 401);
                     return;
@@ -173,6 +172,17 @@ class PacketHandler {
                 }
 
                 channel.id = latestId + 1;
+
+                if (channel.members == null)
+                    channel.members = new Array<Int>();
+                if (channel.messages == null)
+                    channel.messages = new Array<Message>();
+                if (channel.name == null)
+                    channel.name = "Unnamed channel";
+                if (channel.owner == null) {
+                    req.replyData("No owner specified", "text/plain", 417);
+                    return;
+                }
 
                 DatabaseManager.addChannel(channel);
 
