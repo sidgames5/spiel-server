@@ -179,10 +179,6 @@ class PacketHandler {
                     channel.messages = new Array<Message>();
                 if (channel.name == null)
                     channel.name = "Unnamed channel";
-                if (channel.owner == null) {
-                    req.replyData("No owner specified", "text/plain", 417);
-                    return;
-                }
 
                 DatabaseManager.addChannel(channel);
 
