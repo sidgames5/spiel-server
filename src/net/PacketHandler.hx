@@ -77,24 +77,37 @@ class PacketHandler {
             req.replyData(token, "text/plain", 200);
             return;
         } else {
-            // ensure the password is correct
-            var pass = packet.passwordHash;
-            var user = DatabaseManager.getUserByUsername(packet.username);
-            if (user == null) {
-                req.replyData("User not found", "text/plain", 404);
+            if (packet.username == null) {
+                // check the tokens list
+                if (TokenManager.validate(packet.passwordHash)) {
+                    var user = TokenManager.getUser(packet.passwordHash);
+                    var token = TokenManager.generate(user);
+                    TokenManager.register(user, token);
+                    req.replyData(token, "text/plain", 200);
+                    return;
+                }
+                req.replyData("Invalid token", "text/plain", 401);
+                return;
+            } else {
+                // ensure the password is correct
+                var pass = packet.passwordHash;
+                var user = DatabaseManager.getUserByUsername(packet.username);
+                if (user == null) {
+                    req.replyData("User not found", "text/plain", 404);
+                    return;
+                }
+                if (pass != user.passwordHash) {
+                    req.replyData("Password incorrect", "text/plain", 401);
+                    return;
+                }
+
+                // create a new session token
+                var token = TokenManager.generate(user);
+                TokenManager.register(user, token);
+
+                req.replyData(token, "text/plain", 200);
                 return;
             }
-            if (pass != user.passwordHash) {
-                req.replyData("Password incorrect", "text/plain", 401);
-                return;
-            }
-
-            // create a new session token
-            var token = TokenManager.generate(user);
-            TokenManager.register(user, token);
-
-            req.replyData(token, "text/plain", 200);
-            return;
         }
 
         req.replyData("Internal server error", "text/plain", 500);
